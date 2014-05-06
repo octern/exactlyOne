@@ -1,0 +1,107 @@
+<html>
+<head>
+	<link rel="icon" href="spoon.png" type="image/x-icon"/>
+	<link rel="stylesheet" href="/jquery/css/themes/default/jquery.mobile.css">
+	<script src="/jquery/jquery.js"></script>
+	<script src="/jquery/jquery.mobile-1.4.0.js"></script>
+
+	<style type="text/css">
+		#body {
+			width:500px;
+			height:800px;
+			margin-left:auto;
+			margin-right:auto;
+			background-color:#f0f099;
+			padding:20px;
+			font-size: 20pt;
+		}
+		#icon {
+			width: 400px;
+			height: 100px;
+			background-size:100%;
+			margin-bottom: 20px;
+			margin-left:auto;
+			margin-right:auto;
+			background-image:url("spoon.png");
+		}			
+		label {
+			font-size: 20pt;
+		}
+		body {
+			background-color:#c0c0c0;
+		}
+		#current {
+			margin-left:auto;
+			margin-right:auto;
+			font-size: 40pt;
+			color: darkgreen;
+			text-align:center;
+		}			
+		#ts {
+			margin-left:auto;
+			margin-right:auto;
+			font-size: 10pt;
+			color: #909055;
+			text-align:center;
+		}		
+		div.ui-input-text {
+			margin-left:auto;
+			margin-right:auto;
+			width:120px;
+		}
+		#spenter {
+			text-align:center;
+		}
+	</style>
+	
+	<script type="text/javascript">
+		function spupdate() {
+			$.get( "spget.php", function(data) {
+				dats = data.split("~");
+				window.splevel=dats[1];
+				window.lastupdate = dats[0].substring(5,7) + "/" + dats[0].substring(8,16);
+				$("#current").html(window.splevel);
+				$("#ts").html(window.lastupdate);
+			});			
+		}
+		$( document ).ready(function() {
+			spupdate();
+			window.splevel="?";
+		$("#spform").submit(function (event) {
+			splevel=$("#spenter").val();
+			$.get( "spcatch.php?sp="+splevel, function(data) {
+//				alert(data);
+			});						
+			$("#current").html(window.splevel);
+			$("#spenter").val("");
+			event.preventDefault();
+		});
+		$("#spupdate").click( function(event){
+			spupdate();
+		});
+		$("#spenter").focus();
+// 		$( "#spform" ).submit(function( event ) {
+// 			alert( "Handler for .submit() called." );
+// 			event.preventDefault();
+// 			return false;
+// 		});
+		setInterval(spupdate, 60000);
+	});
+	</script>    
+
+</head>
+
+<body>
+<div id="body">
+	<div id="icon"> </div>
+	<div id="current">
+		retrieving...
+	</div>
+	<div id="ts">-</div>
+	<form id="spform" name="spform" action="spcatch.php" method="GET">
+	<label for="basic"></label>
+	<input type="text" name="sp" id="spenter" value="" size="5" placeholder="0 - 10" />
+<!--	<input type="submit" id="spsub" value="send"> -->
+	</form>
+<!-- 	<button id="spupdate" name="spupdate" data-role="none">get latest</button> -->
+</div>
