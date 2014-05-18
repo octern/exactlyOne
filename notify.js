@@ -4,16 +4,17 @@
 		// console.log(permission);
 	});
 
-	function show() {
+	function notify(title, text="") {
 		window.setTimeout(function () {
 			var instance = new Notification(
-				"hi", {
-					body: ""
+				title, {
+					body: text
 				}
 			);
 
 			instance.onclick = function () {
-				$("#spenter").focus()
+				window.focus();
+				$("#spenter").focus();
 			};
 			instance.onerror = function () {
 				// Something to do
@@ -29,4 +30,10 @@
 		return false;
 	}
 
-	setInterval(function() {show();}, 3600000);
+	function remupdate(min) {
+		clearInterval(window.interval);
+		if(min==0) {alert("reminders off"); return false;}
+		min = Math.max(min, .1);
+		alert("setting reminder interval to " + min + " minutes");
+		window.interval = setInterval(function() {notify("hi!");}, min*60000);
+	}

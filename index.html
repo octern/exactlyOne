@@ -60,32 +60,46 @@
 				dats = data.split("~");
 				window.splevel=dats[1];
 				window.lastupdate = dats[0].substring(5,7) + "/" + dats[0].substring(8,16);
-				$("#current").html(window.splevel);
+//				$("#current").html(window.splevel);
 				$("#ts").html(window.lastupdate);
 				window.splevel=window.splevel + " ~ " + dats[2];
-				$("#current").html(window.splevel);
+// 				alert($("#current").html());
+// 				alert(window.splevel);
+				if(window.splevel != $("#current").html()) {
+//					alert(window.splevel + " differs from " + 	$("#current").html());
+					$("#current").html(window.splevel);
+					notify("hi!", "the page was updated.");
+				}
 			});			
 		}
 		$( document ).ready(function() {
 			spupdate();
 			window.splevel="?";
-
-		$('input').keypress(function (e) {
+			remupdate(Math.max($("#rem").val(), 60));
+		$('input.enternum').keypress(function (e) {
 		  if (e.which == 13) {
 			$('form#spform').submit();
+			return false;    //<---- Add this line
+		  }
+		});
+		$('#rem').keypress(function (e) {
+		  if (e.which == 13) {
+			remupdate($("#rem").val());
 			return false;    //<---- Add this line
 		  }
 		});
 		$("#spform").submit(function (event) {
 			splevel="";
 			$("input.enternum").each(function() {
-				splevel = splevel + $( this ).val() + "~";
+				splevel = splevel + $( this ).val() + " ~ ";
 				$( this ).val("");
 			});
+			splevel = splevel.substring(0,splevel.length-2);
 // 			alert(splevel);
 			$.get( "spcatch.php?sp="+splevel, function(data) {
 //				alert(data);
 			});						
+//			alert("submitting");
 			$("#current").html(window.splevel);
 			event.preventDefault();
 		});
@@ -119,5 +133,7 @@
 
 <!--	<input type="submit" id="spsub" value="send"> -->
 	</form>
+	<label for="basic"></label>
+	<input type="text" name="rem" id="rem" value="" size="9" class="num" placeholder="reminder (min)" style="font-size:70%; background-color:#FFe4e4"/>
 <!-- 	<button id="spupdate" name="spupdate" data-role="none">get latest</button> -->
 </div>
