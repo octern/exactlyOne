@@ -10,13 +10,27 @@ $showprinth=1;
 showerrors($showErr);
 
 $now = date("Y-m-d H:i:s");
-$rating = intval($_REQUEST['sp']);
 $note = $_REQUEST['note'];
+$ratingstr = $_GET['sp'];
+$ratings = explode("~",$ratingstr);
+print("<BR>ratingstr is $ratingstr<br>");
+print_r($ratings);
 $floc = "sp.txt";
 
 $out = fopen($floc, "a");
 
-fwrite($out, "\r\n$now\t$rating\t$note");
+
+$outstr = "\r\n$now";
+
+foreach($ratings as $rating) {
+	$rating = htmlentities($rating);
+	echo("currently $outstr");
+	$outstr .= "\t$rating";
+}
+
+$outstr.="\t$note";
+
+fwrite($out, $outstr);
 fclose($out);
 
 echo("set to $rating");
