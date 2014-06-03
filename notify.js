@@ -4,7 +4,10 @@
 		// console.log(permission);
 	});
 
-	function notify(title, text="") {
+	function notify(title, text) {
+		if(typeof(text)==='undefined') {
+			text="";
+		}
 		window.setTimeout(function () {
 			var instance = new Notification(
 				title, {
